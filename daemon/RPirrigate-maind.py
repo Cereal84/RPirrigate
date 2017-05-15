@@ -105,20 +105,20 @@ try:
 	while(True):
 		#EXECUTE WEATHERD AT 3 AM
 		now = datetime.now()
-		if now.hour==0 and not weatherdExec and Settings.weatherEnabled:
+		if now.hour == 0 and not weatherdExec and Settings.weatherEnabled:
 			wd = ""
 			#ATTEMPTS UNTIL GETS OK RESPONSE FROM WEATHERD (should always go fine btw)
-			while wd!="OK\n":
+			while wd != "OK\n":
 				logStatus("FETCH WEATHER")
 				wd = subprocess.check_output(["python", "/srv/rpirrigate/daemon/RPirrigate-weatherd.py"])
-				if wd!="OK\n":
+				if wd != "OK\n":
 					sleep((datetime.now().second % 12)+3) #waits pseudo-random seconds 3-15 before attempting again
 					logStatus("FETCH WEATHER FAILED")
 
 			weatherdExec = True
 			Settings.ReloadWeatherLogsOnNext = True
 
-		if now.hour==1:
+		if now.hour == 1:
 			weatherdExec = False
 
 		#CHECK IF NEED TO RELOAD SETTINGS (SIGUSR1, sent by web)
