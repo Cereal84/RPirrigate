@@ -110,7 +110,6 @@ class DBClass:
 
     # returns array [TimeInterval, Hour, Liters, FirstExecution]
     def select_event_data(self, EventID):
-
         conn = sqlite3.connect(self.DB_PATH)
         cursor = conn.cursor()
 

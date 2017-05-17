@@ -25,7 +25,7 @@ class EventClass:
         self.reload(DataBase)
 
     def reload(self, DataBase):
-        # returns array [TimeInterval, Hour, Liters, FirstExecution]
+        """ returns array [TimeInterval, Hour, Liters, FirstExecution] """
         data = DataBase.select_event_data(self.id)
 
         self.timeInterval = data[0]

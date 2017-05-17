@@ -1,9 +1,8 @@
 import socket
 import os, os.path
-import time,stat
+import time, stat
 import RPi.GPIO as GPIO
 
-#importing for constraints
 from GPIOClass import GPIOClass
 
 socketpath = "/run/rpirrigate-gpiod-socket"
@@ -11,57 +10,59 @@ socketpath = "/run/rpirrigate-gpiod-socket"
 GPIO.setmode(GPIO.BCM)
 GPIO.setwarnings(False)
 
+
 def set_high(gp):
-	GPIO.setup(gp,GPIO.OUT)
-	GPIO.output(gp,1)
+    GPIO.setup(gp, GPIO.OUT)
+    GPIO.output(gp, 1)
+
 
 def set_low(gp):
-	GPIO.setup(gp,GPIO.OUT)
-	GPIO.output(gp,0)
+    GPIO.setup(gp, GPIO.OUT)
+    GPIO.output(gp, 0)
+
 
 def get_value(gp):
-	val = 1
-	if val==0:
-		return GPIOClass.STATE_ON+"#"
-	elif val==1:
-		return GPIOClass.STATE_OFF+"#"
-	else:
-		return GPIOClass.STATE_ERR+"#"
+    val = 1
+    if val == 0:
+        return GPIOClass.STATE_ON + "#"
+    elif val == 1:
+        return GPIOClass.STATE_OFF + "#"
+    else:
+        return GPIOClass.STATE_ERR + "#"
 
 
 if os.path.exists(socketpath):
-	os.remove( socketpath )
+    os.remove(socketpath)
 
-server = socket.socket( socket.AF_UNIX, socket.SOCK_STREAM )
+server = socket.socket(socket.AF_UNIX, socket.SOCK_STREAM)
 server.bind(socketpath)
 
-os.chmod(socketpath,stat.S_IRWXO)
+os.chmod(socketpath, stat.S_IRWXO)
 
 server.listen(5)
 
 while True:
-	conn, addr  = server.accept()
+    conn, addr = server.accept()
 
-	while True:
+    while True:
 
-		datagram = conn.recv( 1024 )
+        datagram = conn.recv(1024)
 
+        if not datagram:
+            break
 
-		if not datagram:
-			break
-		
-		d=datagram.split("#")
+        d = datagram.split("#")
 
-		if(len(d)<2):
-			break
+        if (len(d) < 2):
+            break
 
-		if str(d[0]) == GPIOClass.STATE_ON :
-			set_low(int(d[1]))
-		elif str(d[0]) == GPIOClass.STATE_OFF:
-			set_high(int(d[1]))
-		elif str(d[0]) == GPIOClass.STR_GETVAL:
-			val = get_value(int(d[1]))
+        if str(d[0]) == GPIOClass.STATE_ON:
+            set_low(int(d[1]))
+        elif str(d[0]) == GPIOClass.STATE_OFF:
+            set_high(int(d[1]))
+        elif str(d[0]) == GPIOClass.STR_GETVAL:
+            val = get_value(int(d[1]))
 
-			conn.send( str(val) )
+            conn.send(str(val))
 
 server.close()

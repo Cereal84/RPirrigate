@@ -1,24 +1,23 @@
-
-### CLASS Module
-##
-##  Properties
-##     - location
-##     - timeToWait
-##     - reloadSettingsOnNext
-##     - reloadManualOnNext
-##
-##  Methods
-##     - __init__
-##     - reload
+# CLASS Module
+#
+#  Properties
+#     - location
+#     - timeToWait
+#     - reloadSettingsOnNext
+#     - reloadManualOnNext
+#
+#  Methods
+#     - __init__
+#     - reload
 
 class SettingClass:
-	def __init__(self, DataBase):
-		self.reload(DataBase)
+    def __init__(self, DataBase):
+        self.reload(DataBase)
 
-		self.reloadSettingsOnNext = False
-		self.reloadManualsOnNext = False
-		self.reloadWeatherLogsOnNext = False
+        self.reloadSettingsOnNext = False
+        self.reloadManualsOnNext = False
+        self.reloadWeatherLogsOnNext = False
 
-	def reload(self, DataBase):	
-		self.location = DataBase.select1_setting("Location")
-		self.weatherEnabled = DataBase.select1_setting("WeatherEnabled")=="1"
+    def reload(self, DataBase):
+        self.location = DataBase.select1_setting("Location")
+        self.weatherEnabled = DataBase.select1_setting("WeatherEnabled") == "1"
