@@ -1,5 +1,4 @@
 import sqlite3
-
 from datetime import datetime
 
 
@@ -17,7 +16,7 @@ from datetime import datetime
 #     - select_module_ids(self)
 #     - select_module_data(self, ModuleID)
 #     - select_module_manual(self, ModuleID)
-#    - select_event_ids(self, ModuleID)
+#     - select_event_ids(self, ModuleID)
 #     - select_event_data(self, EventID)
 #     - query_pid_save(self, pid)
 
@@ -31,14 +30,16 @@ class DBClass:
         conn = sqlite3.connect(self.DB_PATH)
         cursor = conn.cursor()
 
-        cursor.execute("SELECT Value FROM tbSettings WHERE Name='" + name + "'")
+        cursor.execute("SELECT Value FROM tbSettings WHERE Name='" +
+                       name + "'")
         results = cursor.fetchall()
 
         conn.commit()
         conn.close()
         return results[0][0]
 
-    def select_module_ids(self):  # returns list of IDs
+    def select_module_ids(self):
+        """Returns list of IDs."""
         ids = []
 
         conn = sqlite3.connect(self.DB_PATH)
@@ -55,11 +56,12 @@ class DBClass:
         return ids
 
     def select_module_data(self, ModuleID):
-        """ returns array [0 -> Name, 1 -> Description, 2 -> GPIO] """
+        """Returns array [0 -> Name, 1 -> Description, 2 -> GPIO]."""
         conn = sqlite3.connect(self.DB_PATH)
         cursor = conn.cursor()
 
-        cursor.execute("SELECT GPIO FROM tbModules WHERE ModuleID = " + str(ModuleID))
+        cursor.execute("SELECT GPIO FROM tbModules WHERE ModuleID = " +
+                       str(ModuleID))
         results = cursor.fetchall()
 
         conn.commit()
@@ -68,11 +70,12 @@ class DBClass:
         return [results[0][0]]
 
     def select_module_manual(self, ModuleID):
-        """ returns array [0 -> ManualACT, 1 -> ManualVAL] """
+        """Returns array [0 -> ManualACT, 1 -> ManualVAL]."""
         conn = sqlite3.connect(self.DB_PATH)
         cursor = conn.cursor()
 
-        cursor.execute("SELECT ManualACT, ManualVAL FROM tbModules WHERE ModuleID = " + str(ModuleID))
+        cursor.execute("SELECT ManualACT, ManualVAL FROM tbModules WHERE " +
+                       "ModuleID = " + str(ModuleID))
         results = cursor.fetchall()
 
         conn.commit()
@@ -80,13 +83,15 @@ class DBClass:
 
         return [results[0][0], results[0][1]]
 
-    def select_event_ids(self, ModuleID):
+    def select_event_ids(self, moduleID):
+        """Returns the events ID from a given Module."""
         ids = []
 
         conn = sqlite3.connect(self.DB_PATH)
         cursor = conn.cursor()
 
-        cursor.execute("SELECT EventID FROM tbEvents WHERE ModuleID = " + str(ModuleID))
+        cursor.execute("SELECT EventID FROM tbEvents WHERE ModuleID = " +
+                       str(moduleID))
         results = cursor.fetchall()
 
         conn.commit()
@@ -100,7 +105,8 @@ class DBClass:
         conn = sqlite3.connect(self.DB_PATH)
         cursor = conn.cursor()
 
-        cursor.execute("SELECT LogID, Time, isRain, Liters, ModuleID, EventID FROM tbLogs;")
+        cursor.execute("SELECT LogID, Time, isRain, Liters, ModuleID,"+
+                        "EventID FROM tbLogs;")
         results = cursor.fetchall()
 
         conn.commit()
@@ -108,14 +114,15 @@ class DBClass:
 
         return results
 
-    # returns array [TimeInterval, Hour, Liters, FirstExecution]
     def select_event_data(self, EventID):
+        """Returns array [TimeInterval, Hour, Liters, FirstExecution]."""
         conn = sqlite3.connect(self.DB_PATH)
         cursor = conn.cursor()
 
         cursor.execute(
             """SELECT TimeInterval, strftime('%H',Hour), strftime('%M',Hour), "
-                Liters, FirstExecution FROM tbEvents WHERE EventID = """ + str(EventID))
+                Liters, FirstExecution FROM tbEvents WHERE EventID = """ +
+                str(EventID))
         results = cursor.fetchall()
 
         conn.commit()
@@ -124,7 +131,7 @@ class DBClass:
         return [results[0][0], results[0][1], results[0][2], results[0][3], results[0][4]]
 
     def query_pid_save(self, pid):
-
+        """Update."""
         conn = sqlite3.connect(self.DB_PATH)
         cursor = conn.cursor()
 
@@ -136,7 +143,7 @@ class DBClass:
         return
 
     def select1_willRainToday(self):
-
+        """Returns."""
         conn = sqlite3.connect(self.DB_PATH)
         cursor = conn.cursor()
 
