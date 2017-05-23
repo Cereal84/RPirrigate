@@ -80,7 +80,9 @@ class ModuleClass:
         # if today will not rain, checks events
         if self.manualACT:
             if self.manualVAL:
-                return -1  # return -1 which means manual (note that bool(-1)->True so ok for if(..) check)
+                # return -1 which means manual
+                # (note that bool(-1)->True so ok for if(..) check)
+                return -1
             else:
                 return False
         else:
@@ -93,10 +95,12 @@ class ModuleClass:
             return False
 
     def shouldCloseNow(self):
-        """ returns true if the event in self.openEventID has "expired" """
+        """ returns true if the event in self.openEventID has 'expired' """
         now = datetime.now()
 
-        if self.openEventID == -1 and (not self.manualACT or (self.manualACT and not self.manualVAL)):
+        if self.openEventID == -1 and (not self.manualACT or
+                                           (self.manualACT and
+                                                not self.manualVAL)):
             return True
         else:
             if self.manualACT:

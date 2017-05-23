@@ -45,7 +45,8 @@ class EventClass:
                 last = datetime.strptime(last, '%Y-%m-%d %H:%M:%S')
             next= last + timedelta(minutes=self.timeInterval)
 
-            return datetime(next.year, next.month, next.day, self.hour.hour, self.hour.minute)
+            return datetime(next.year, next.month, next.day, self.hour.hour,
+                            self.hour.minute)
         else:
             # here if not found yet
             datehour = str(self.firstExecution) + " " + str(self.hour)

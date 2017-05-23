@@ -105,8 +105,8 @@ class DBClass:
         conn = sqlite3.connect(self.DB_PATH)
         cursor = conn.cursor()
 
-        cursor.execute("SELECT LogID, Time, isRain, Liters, ModuleID,"+
-                        "EventID FROM tbLogs;")
+        cursor.execute("SELECT LogID, Time, isRain, Liters, ModuleID," +
+                       "EventID FROM tbLogs;")
         results = cursor.fetchall()
 
         conn.commit()
@@ -115,20 +115,21 @@ class DBClass:
         return results
 
     def select_event_data(self, EventID):
-        """Returns array [TimeInterval, Hour, Liters, FirstExecution]."""
+        """Returns array [TimeInterval, Hour (H;M), Liters, FirstExecution]."""
         conn = sqlite3.connect(self.DB_PATH)
         cursor = conn.cursor()
 
         cursor.execute(
             """SELECT TimeInterval, strftime('%H',Hour), strftime('%M',Hour), "
                 Liters, FirstExecution FROM tbEvents WHERE EventID = """ +
-                str(EventID))
+            str(EventID))
         results = cursor.fetchall()
 
         conn.commit()
         conn.close()
 
-        return [results[0][0], results[0][1], results[0][2], results[0][3], results[0][4]]
+        return [results[0][0], results[0][1], results[0][2], results[0][3],
+                results[0][4]]
 
     def query_pid_save(self, pid):
         """Update."""
@@ -162,8 +163,9 @@ class DBClass:
         cursor = conn.cursor()
 
         cursor.execute(
-            "INSERT INTO tbLogs(Time, isRain, Liters, ModuleID, EventID) VALUES (strftime('%Y-%m-%d %H:%M:%S','now','localtime'), 0, -1, " + str(
-                M.id) + ", " + str(evID) + ");")
+            "INSERT INTO tbLogs(Time, isRain, Liters, ModuleID, EventID) " +
+            "VALUES (strftime('%Y-%m-%d %H:%M:%S','now','localtime'), 0, -1, "
+            + str(M.id) + ", " + str(evID) + ");")
 
         conn.commit()
         conn.close()
@@ -179,7 +181,8 @@ class DBClass:
         conn = sqlite3.connect(self.DB_PATH)
         cursor = conn.cursor()
 
-        cursor.execute("UPDATE tbLogs SET Liters = " + str(liters) + " WHERE LogID = " + str(M.openDbRowID))
+        cursor.execute("UPDATE tbLogs SET Liters = " + str(liters) +
+                       " WHERE LogID = " + str(M.openDbRowID))
 
         conn.commit()
         conn.close()
@@ -213,7 +216,8 @@ class DBClass:
         conn.close()
 
     def query_delete_old_forecasts(self):
-        sql = "DELETE FROM tbRainForecasts WHERE DATE(Time) < strftime('%Y-%m-%d','now','localtime');"
+        sql = """DELETE FROM tbRainForecasts WHERE DATE(Time) < 
+              "strftime('%Y-%m-%d','now','localtime');"""
 
         conn = sqlite3.connect(self.DB_PATH)
         cursor = conn.cursor()

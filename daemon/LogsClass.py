@@ -6,7 +6,8 @@ from datetime import datetime
 
 
 class Log:
-    def __init__(self, p_LogID, p_Time, p_isRain, p_Liters, p_ModuleID, p_EventID):
+    def __init__(self, p_LogID, p_Time, p_isRain, p_Liters, p_ModuleID,
+                 p_EventID):
         self.id = p_LogID
         self.time = p_Time
         self.isRain = p_isRain
@@ -23,7 +24,8 @@ class LogsClass:
         self.elements = []
         db_logs = DB.select_logs()
         for db_log in db_logs:
-            self.elements.append(Log(db_log[0], db_log[1], db_log[2], db_log[3], db_log[4], db_log[5]))
+            self.elements.append(Log(db_log[0], db_log[1], db_log[2],
+                                     db_log[3], db_log[4], db_log[5]))
 
         # DEBUG
         # print "LOGS RELOADED"
